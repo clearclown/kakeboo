@@ -5,6 +5,7 @@ pics/*
 *.jpg
 *.jpeg
 *.HEIC
+*.heic
 *.gif
 *.pdf
 
