@@ -7,3 +7,14 @@ pics/*
 *.jpeg
 
 docs/temp.md
+
+pics/*
+*.png
+*.PNG
+*.jpg
+*.jpeg
+*.HEIC
+*.heic
+*.gif
+*.pdf
+*.zip
