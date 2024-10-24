@@ -1,24 +1,58 @@
-from fastapi import FastAPI, BackgroundTasks
-from src.core.config import settings
-from src.core.logging import logger
-from src.services.file_service import FileService
-from src.services.ocr_service import OCRService
-from src.services.db_service import DBService
-from src.db.session import init_db
+# backend/main.py
 
-app = FastAPI(title="Receipt Processing API")
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from src.api.routes import receipt, item
+from src.core.config import settings
+from src.db.session import engine
+from src.db.models import Base
+from src.core.logger import setup_logger
+
+# Setup logger
+logger = setup_logger(__name__)
+
+# Create tables
+Base.metadata.create_all(bind=engine)
+
+# Create FastAPI app
+app = FastAPI(
+    title="Receipt OCR API",
+    description="API for processing and managing receipts"
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include routers
+app.include_router(receipt.router, prefix="/api/v1", tags=["receipts"])
+app.include_router(item.router, prefix="/api/v1", tags=["items"])
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize application"""
+    logger.info("Starting application")
+    settings.validate_paths()
 
 @app.get("/")
-async def root():
-    # デバッグメッセージを表示
-    print("[DEBUG] : Root endpoint accessed")
-    return {"message": "Receipt Processing Service"}
+async def hello():
+    return {"message": "Hello, World!"}
 
-# メイン関数
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Cleanup application"""
+    logger.info("Shutting down application")
+
 if __name__ == "__main__":
-    # デバッグメッセージを表示
-    print("[DEBUG] : Starting the application")
     import uvicorn
-    # デバッグメッセージを表示
-    print("[DEBUG] : Running uvicorn server")
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True
+    )
