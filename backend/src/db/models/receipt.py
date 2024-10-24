@@ -1,11 +1,10 @@
 # backend/src/db/models/receipt.py
 
-from sqlalchemy import Column, String, Float, Integer, DateTime, ForeignKey, JSON
+from sqlalchemy import Column, String, Float, Integer, DateTime, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from uuid import uuid4
-from typing import List
-from ..session import Base
+from src.db.models.base import Base
 
 class Receipt(Base):
     __tablename__ = 'receipts'
