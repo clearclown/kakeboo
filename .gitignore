@@ -1,2 +1,7 @@
 .env
 result.md
+
+pics/*
+*.png
+*.jpg
+*.jpeg
