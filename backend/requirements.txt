@@ -52,3 +52,6 @@ pymysql
 python-multipart
 pydantic
 pydantic-settings
+python-jose[cryptography]
+passlib[bcrypt]
+watchdog
