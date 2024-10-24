@@ -1,9 +1,7 @@
-# backend/src/core/config.py
-
 from pydantic_settings import BaseSettings
 from pathlib import Path
 from typing import Optional
-import os
+from functools import lru_cache
 
 class Settings(BaseSettings):
     # Database settings
@@ -15,20 +13,22 @@ class Settings(BaseSettings):
     # GCP settings
     GCP_CREDENTIALS_PATH: str = "./src/google/gcpVision.json"
 
-    # File paths
-    DATA_DIR: Path = Path("./data/pics")
-    LOGS_DIR: Path = Path("./logs")
+    # File paths with default values
+    DATA_DIR: Path = Path("./../../data/pics")
+    LOGS_DIR: Path = Path("./../../logs/")
 
     # Directory paths
-    NOT_YET_DIR: Path = DATA_DIR / "01notYet"
-    CURRENT_DIR: Path = DATA_DIR / "02current"
-    TXT_DIR: Path = DATA_DIR / "03txt"
-    MD_DIR: Path = DATA_DIR / "04md"
-    DONE_DIR: Path = DATA_DIR / "05done"
-    ERROR_DIR: Path = DATA_DIR / "99error"
+    NOT_YET_DIR: Path = Path("./../../data/pics/01notYet")
+    CURRENT_DIR: Path = Path("./../../data/pics/02current")
+    TXT_DIR: Path = Path("./../../data/pics/03txt")
+    MD_DIR: Path = Path("./../../data/pics/04md")
+    DONE_DIR: Path = Path("./../../data/pics/05done")
+    ERROR_DIR: Path = Path("./../../data/pics/99error")
 
     class Config:
         env_file = ".env"
+        case_sensitive = True
+        extra = "ignore"  # 未知の環境変数を無視
 
     def validate_paths(self):
         """Validate and create necessary directories"""
@@ -38,7 +38,12 @@ class Settings(BaseSettings):
             self.TXT_DIR, self.MD_DIR,
             self.DONE_DIR, self.ERROR_DIR
         ]:
-            if not path.exists():
-                path.mkdir(parents=True, exist_ok=True)
+            path.mkdir(parents=True, exist_ok=True)
 
-settings = Settings()
+@lru_cache()
+def get_settings() -> Settings:
+    """キャッシュされた設定を取得"""
+    return Settings()
+
+# シングルトンインスタンスの作成
+settings = get_settings()
