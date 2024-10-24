@@ -2,12 +2,14 @@
 gcpVision.json
 pics/*
 *.png
+*.PNG
 *.jpg
 *.jpeg
 *.HEIC
 *.heic
 *.gif
 *.pdf
+*.zip
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
