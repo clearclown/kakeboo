@@ -1,6 +1,6 @@
 # kakeboo
 
-#### テーブル設計
+## データベース設計
 
 ### 1. データベースの内容を表形式で表示
 
@@ -114,23 +114,13 @@
 }
 ```
 
-./pics/
+## フォルダ構成 :
+### 00notYet_backup : バックアップ
+### 01notYet : 未処理ファイル
+### 02current : 現在ファイル
+### 03txt : 文字起こし後のフォルダ
+### 04md : markdownフォルダ
+### 05done : 処理完了
+### 99error : エラー
 
-<NOT YET>
-01notYet : 初期フォルダ
-↓
-<CURRENT>
-02currentMD : 現在の作業用フォルダ(markdown)
-02currentPics : 現在の作業
-
-<>
-02jpgpng :
-02jpgpngdone
-
-02other
-02pdf
-
-03done
-04error
-
-01notYet_backup
+### ./../log
